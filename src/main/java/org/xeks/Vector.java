@@ -54,24 +54,20 @@ public class Vector<T> {
     public static <T> Vector<T> ofObj(T[] obj) {
         return new Vector<T>(obj);
     }
-    public final int indexOf(T x, java.lang.Object fromIndex)
-    {
-        int i = ( (eq(fromIndex, null)) ? (0) : (((int) (toInt(fromIndex)) )) );
-        if (( i < 0 ))
-        {
+
+    public final int indexOf(T x, java.lang.Object fromIndex) {
+        int i = ((eq(fromIndex, null)) ? (0) : (((int) (toInt(fromIndex)))));
+        if ((i < 0)) {
             i += this.length;
-            if (( i < 0 ))
-            {
+            if ((i < 0)) {
                 i = 0;
             }
         }
-        while (( i < this.length ))
-        {
-            if (eq(this.array[i], x))
-            {
+        while ((i < this.length)) {
+            if (eq(this.array[i], x)) {
                 return i;
             }
-            ++ i;
+            ++i;
         }
         return -1;
     }
@@ -80,16 +76,14 @@ public class Vector<T> {
         return (obj == null) ? 0 : ((java.lang.Number) obj).intValue();
     }
 
-    public static boolean eq(java.lang.Object j, java.lang.Object k)
-    {
+    public static boolean eq(java.lang.Object j, java.lang.Object k) {
 
         if (j == k)
             return true;
         if (j == null || k == null)
             return false;
 
-        if (j instanceof java.lang.Number)
-        {
+        if (j instanceof java.lang.Number) {
             if (!(k instanceof java.lang.Number))
                 return false;
             java.lang.Number _u = (java.lang.Number) j;
@@ -100,5 +94,42 @@ public class Vector<T> {
         } else {
             return j.equals(k);
         }
+    }
+
+    public final int push(T x) {
+        if ((this.length >= this.array.length)) {
+            int len = (((this.length << 1)) + 1);
+            T[] ts = ((T[]) new Object[len]);
+            arraycopy(this.array, 0, ts, 0, this.array.length);
+            this.array = ts;
+        }
+        this.array[this.length] = x;
+        return ++this.length;
+    }
+
+    public final T pop() {
+        if ((this.length > 0)) {
+            T val = this.array[--this.length];
+            this.array[this.length] = null;
+            return val;
+        } else {
+            return null;
+        }
+    }
+
+    public final String join(String str) {
+        StringBuilder buf = new StringBuilder();
+        int i = -1;
+        boolean first = true;
+        int length = this.length;
+        while ((++i < length)) {
+            if (first) {
+                first = false;
+            } else {
+                buf.append(str);
+            }
+            buf.append(((T) (this.array[i])));
+        }
+        return buf.toString();
     }
 }
