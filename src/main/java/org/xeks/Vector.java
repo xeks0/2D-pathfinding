@@ -5,19 +5,19 @@ import static java.lang.System.arraycopy;
 public class Vector<T> {
 
     public int length;
-    public T[] _a;
+    public T[] array;
 
     public Vector(T[] obj) {
-        this._a = obj;
+        this.array = obj;
         this.length = obj.length;
     }
 
     public Vector() {
         this.length = 0;
-        this._a = ((T[]) new Object[0]);
+        this.array = ((T[]) new Object[0]);
     }
 
-    public final Vector<T> spice(int pos, int len) {
+    public final Vector<T> splice(int pos, int len) {
         if ((len < 0)) {
             return new Vector<T>();
         }
@@ -38,7 +38,7 @@ public class Vector<T> {
                 }
             }
         }
-        T[] a = this._a;
+        T[] a = this.array;
         T[] ret = ((T[]) new Object[len]);
         arraycopy(a, pos, ret, 0, len);
         Vector<T> ret1 = Vector.ofObj(ret);
@@ -53,5 +53,52 @@ public class Vector<T> {
 
     public static <T> Vector<T> ofObj(T[] obj) {
         return new Vector<T>(obj);
+    }
+    public final int indexOf(T x, java.lang.Object fromIndex)
+    {
+        int i = ( (eq(fromIndex, null)) ? (0) : (((int) (toInt(fromIndex)) )) );
+        if (( i < 0 ))
+        {
+            i += this.length;
+            if (( i < 0 ))
+            {
+                i = 0;
+            }
+        }
+        while (( i < this.length ))
+        {
+            if (eq(this.array[i], x))
+            {
+                return i;
+            }
+            ++ i;
+        }
+        return -1;
+    }
+
+    private Object toInt(Object obj) {
+        return (obj == null) ? 0 : ((java.lang.Number) obj).intValue();
+    }
+
+    public static boolean eq(java.lang.Object j, java.lang.Object k)
+    {
+
+        if (j == k)
+            return true;
+        if (j == null || k == null)
+            return false;
+
+        if (j instanceof java.lang.Number)
+        {
+            if (!(k instanceof java.lang.Number))
+                return false;
+            java.lang.Number _u = (java.lang.Number) j;
+            java.lang.Number _s = (java.lang.Number) k;
+            if (j instanceof java.lang.Long || k instanceof java.lang.Long)
+                return _u.longValue() == _s.longValue();
+            return _u.doubleValue() == _s.doubleValue();
+        } else {
+            return j.equals(k);
+        }
     }
 }
