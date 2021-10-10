@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.xeks.Vector;
 
 public class ConstraintSegment {
+
     public static int INC;
 
     static {

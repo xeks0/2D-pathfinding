@@ -1,5 +1,7 @@
 package org.xeks;
 
+import org.xeks.data.Obstacle;
+
 import static java.lang.System.arraycopy;
 
 public class Vector<T> {
@@ -131,5 +133,30 @@ public class Vector<T> {
             buf.append(((T) (this.array[i])));
         }
         return buf.toString();
+    }
+
+    public T get(int idx) {
+        if (((idx >= this.array.length) || (idx < 0))) {
+            return null;
+        }
+        return this.array[idx];
+    }
+
+    public final T set(int idx, T v) {
+        if ((idx >= this.array.length)) {
+            int newl = (idx + 1);
+            if ((idx == this.array.length)) {
+                newl = (((idx << 1)) + 1);
+            }
+            T[] newArr = ((T[]) new Object[newl]);
+            if ((this.length > 0)) {
+                arraycopy(this.array, 0, newArr, 0, this.length);
+            }
+            this.array = newArr;
+        }
+        if ((idx >= this.length)) {
+            this.length = (idx + 1);
+        }
+        return this.array[idx] = v;
     }
 }
