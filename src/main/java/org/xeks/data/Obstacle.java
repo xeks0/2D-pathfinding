@@ -163,4 +163,11 @@ public class Obstacle {
         }
         return res;
     }
+
+    public void dispose() {
+        this.matrix = null;
+        this.coordinates = null;
+        this.constraintShape = null;
+    }
+
 }
