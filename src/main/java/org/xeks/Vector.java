@@ -1,8 +1,8 @@
 package org.xeks;
 
-import org.xeks.data.Obstacle;
+import org.xeks.data.SortArgInterface;
 
-import java.util.Comparator;
+import java.util.function.Function;
 
 import static java.lang.System.arraycopy;
 
@@ -297,8 +297,40 @@ public class Vector<T> {
         return x;
     }
 
-    public final void sort(Comparator comparator)
-    {
-
+    public final void sort(SortArgInterface function) {
+        if ((this.length == 0)) {
+            return;
+        }
+        this.quicksort(function, 0, (this.length - 1));
     }
+
+    public final void quicksort(SortArgInterface function, int lo, int hi) {
+        T[] buf = this.array;
+        int i = lo;
+        int j = hi;
+        int p = (i + j) >> 1;
+        while ((i <= j)) {
+            while (((i < hi) && (function.operation(i,  p) < 0))) {
+                ++i;
+            }
+            while (((j > lo) && (function.operation(j, p) > 0))) {
+                --j;
+            }
+            if ((i <= j)) {
+                T t = buf[i];
+                buf[i++] = buf[j];
+                buf[j--] = t;
+            }
+        }
+        if ((lo < j)) {
+            this.quicksort(function, lo, j);
+        }
+
+        if ((i < hi)) {
+            this.quicksort(function,i, hi);
+        }
+    }
+
+
+
 }

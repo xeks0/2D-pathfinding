@@ -23,6 +23,15 @@ public class Matrix2D {
 
     public double f;
 
+    public Matrix2D(Double aDouble, Object o, Object o1, Object o2, Object o3, Object o4) {
+        this.a = 1;
+        this.b = 0;
+        this.c = 0;
+        this.d = 1;
+        this.e = 0;
+        this.f = 0;
+    }
+
 
     public void tranform(Point2D point) {
         double x = ( ( ( this.a * point.x ) + ( this.c * point.y ) ) + this.e );

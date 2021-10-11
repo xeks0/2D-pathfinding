@@ -218,7 +218,7 @@ public class AStar {
                     f = (h + g);
                     fillDatas = false;
                     //todo check syntax
-                    if (( (this.openedFaces).get(neighbourFace) == null) || (!(this.openedFaces.get(neighbourFace) != null && Boolean.parseBoolean(this.openedFaces.get(neighbourFace).toString())))) {
+                    if (( (this.openedFaces).get(neighbourFace) == null) || (!(this.openedFaces.get(neighbourFace) != null && this.openedFaces.get(neighbourFace)))) {
                         this.sortedOpenedFaces.push(neighbourFace);
                         (this.openedFaces).put(neighbourFace, true);
                         fillDatas = true;
@@ -255,7 +255,9 @@ public class AStar {
 
             this.openedFaces.put(this.curFace, false);
             this.closedFaces.put(this.curFace, true);
-            this.sortedOpenedFaces.sort(Comparator.comparingInt(String::length));
+            //with low distance value are at the end of the array
+            SortArgInterface sortArgInterface = (int a, int b)-> scoreF.get(b).compareTo(scoreF.get(a));
+            this.sortedOpenedFaces.sort(sortArgInterface);
         }
 
         if ((this.curFace == null)) {

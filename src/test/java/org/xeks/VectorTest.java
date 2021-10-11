@@ -1,6 +1,7 @@
 package org.xeks;
 
 import org.junit.jupiter.api.Test;
+import org.xeks.data.SortArgInterface;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -55,6 +56,14 @@ class VectorTest {
         vector.shift();
         assertEquals(vector.get(0) , "world");
     }
+
+    @Test
+    public void testSort() {
+        SortArgInterface d = (int a, int b)-> Integer.compare(vector.get(b).length(), vector.get(a).length());
+        vector.sort(d);
+        assertEquals(vector.get(0) , "people");
+    }
+
 
     @Test
     public void testIndexOutOfBoundsException() {
