@@ -64,8 +64,12 @@ public class RandGenerator {
         while ((this._tempString.length() < 8)) {
             this._tempString = ("0" + this._tempString);
         }
-        this._currSeed = Integer.parseInt(_tempString.substring(1, 5));
-
+        // todo check substing parse
+        try {
+            this._currSeed = Integer.parseInt(_tempString.substring(1, 5));
+        }catch (Exception e){
+            this._currSeed = 0;
+        }
         int res = ((int) (java.lang.Math.round((this.rangeMin + ((((double) (this._currSeed)) / 99999) * ((this.rangeMax - this.rangeMin)))))));
         if ((this._currSeed == 0)) {
             this._currSeed = (this._originalSeed + this._numIter);

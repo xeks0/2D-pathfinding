@@ -183,18 +183,14 @@ public class Vector<T> {
             if ((pos < 0)) {
                 pos = 0;
             }
-
         }
-
         if (eq(end, null)) {
             end = this.length;
         } else {
             if ((compare(end, 0) < 0)) {
                 end = ((int) (toInt(plus(this.length, end))));
             }
-
         }
-
         if ((compare(end, this.length) > 0)) {
             end = this.length;
         }
@@ -291,7 +287,7 @@ public class Vector<T> {
         }
         T x = this.array[0];
         --l;
-        arraycopy(this.array, ((int) (1)), this.array, 0, (this.length - 1));
+        arraycopy(this.array, 1, this.array, 0, (this.length - 1));
         this.array[l] = null;
         this.length = l;
         return x;
@@ -310,7 +306,7 @@ public class Vector<T> {
         int j = hi;
         int p = (i + j) >> 1;
         while ((i <= j)) {
-            while (((i < hi) && (function.operation(i,  p) < 0))) {
+            while (((i < hi) && (function.operation(i, p) < 0))) {
                 ++i;
             }
             while (((j > lo) && (function.operation(j, p) > 0))) {
@@ -327,10 +323,9 @@ public class Vector<T> {
         }
 
         if ((i < hi)) {
-            this.quicksort(function,i, hi);
+            this.quicksort(function, i, hi);
         }
     }
-
 
 
 }

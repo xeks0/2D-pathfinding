@@ -1064,4 +1064,26 @@ public class Mesh {
             }
         }
     }
+
+    public ConstraintShape insertConstraintShape(Vector<Double> coordinates)
+    {
+       ConstraintShape shape = new ConstraintShape();
+        ConstraintSegment segment = null;
+        int i = 0;
+        while (( i < coordinates.length ))
+        {
+            segment = this.insertConstraintSegment(coordinates.get(i), coordinates.get( i + 1 ),coordinates.get( i + 2 ),coordinates.get( i + 3 ));
+            if (( segment != null ))
+            {
+                segment.fromShape = shape;
+                shape.segments.push(segment);
+            }
+
+            i += 4;
+        }
+
+        this.constraintShapes.push(shape);
+        return shape;
+    }
+
 }

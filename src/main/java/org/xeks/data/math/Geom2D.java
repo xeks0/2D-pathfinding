@@ -13,9 +13,9 @@ import java.util.HashMap;
 public class Geom2D {
 
 
-    public static RandGenerator randGen;
+    public static RandGenerator randGen = new RandGenerator(1234, 0, 1);
 
-    public static Vector<Vertex> samples;
+    public static Vector<Vertex> samples = new Vector<>();
 
     public static Point2D circumcenter;
 
@@ -198,8 +198,12 @@ public class Geom2D {
         int relativPos = 0;
         int numIter = 0;
         while (true) {
+            //todo check currFace
+            if(currFace == null){
+                break;
+            }
             boolean tmp = false;
-            if ((!(faceVisited.get(currFace)))) {
+            if (currFace != null && (!(faceVisited.get(currFace)))) {
                 objectContainer = Geom2D.isInFace(x, y, currFace);
                 Intersection _g3 = objectContainer;
                 switch (_g3.index) {

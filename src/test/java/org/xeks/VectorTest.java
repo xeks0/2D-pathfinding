@@ -64,7 +64,6 @@ class VectorTest {
         assertEquals(vector.get(0) , "people");
     }
 
-
     @Test
     public void testIndexOutOfBoundsException() {
         assertThrows(IndexOutOfBoundsException.class, () -> vector.array[10].isEmpty());
