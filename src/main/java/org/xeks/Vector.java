@@ -2,6 +2,8 @@ package org.xeks;
 
 import org.xeks.data.Obstacle;
 
+import java.util.Comparator;
+
 import static java.lang.System.arraycopy;
 
 public class Vector<T> {
@@ -233,7 +235,7 @@ public class Vector<T> {
         return ((String) v1).compareTo((String) v2);
     }
 
-    public static java.lang.Object plus(java.lang.Object v1, java.lang.Object v2) {
+    public static Object plus(java.lang.Object v1, java.lang.Object v2) {
         if (v1 instanceof String || v2 instanceof java.lang.String)
             return String.valueOf(v1) + String.valueOf(v2);
 
@@ -282,7 +284,7 @@ public class Vector<T> {
         ++this.length;
     }
 
-    public final java.lang.Object shift() {
+    public final T shift() {
         int l = this.length;
         if ((l == 0)) {
             return null;
@@ -293,5 +295,10 @@ public class Vector<T> {
         this.array[l] = null;
         this.length = l;
         return x;
+    }
+
+    public final void sort(Comparator comparator)
+    {
+
     }
 }
