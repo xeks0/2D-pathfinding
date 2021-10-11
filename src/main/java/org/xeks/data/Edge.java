@@ -1,11 +1,14 @@
 package org.xeks.data;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import lombok.Setter;
+import lombok.ToString;
 import org.xeks.Vector;
 
 
+@EqualsAndHashCode
 public class Edge {
 
 
@@ -116,4 +119,12 @@ public class Edge {
         return this.getOppositeEdge().getLeftFace();
     }
 
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "id=" + id +
+                ", isReal=" + isReal +
+                ", isConstrained=" + isConstrained +
+                '}';
+    }
 }

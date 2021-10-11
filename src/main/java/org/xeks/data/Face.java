@@ -1,8 +1,11 @@
 package org.xeks.data;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+
+@EqualsAndHashCode
 public class Face {
 
     public static int INC = 0;
@@ -47,4 +50,11 @@ public class Face {
         this.edge = null;
     }
 
+    @Override
+    public String toString() {
+        return "Face{" +
+                "id=" + id +
+                ", isReal=" + isReal +
+                '}';
+    }
 }

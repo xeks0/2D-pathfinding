@@ -17,7 +17,7 @@ public class Geom2D {
 
     public static Vector<Vertex> samples = new Vector<>();
 
-    public static Point2D circumcenter;
+    public static Point2D circumcenter = new Point2D();
 
     public static boolean intersections2segments(double s1p1x, double s1p1y, double s1p2x, double s1p2y, double s2p1x, double s2p1y, double s2p2x, double s2p2y, Point2D posIntersection, Vector<Object> paramIntersection, java.lang.Object infiniteLineMode) {
         boolean tempInfiniteLineMode = toBool(infiniteLineMode);
@@ -203,7 +203,7 @@ public class Geom2D {
                 break;
             }
             boolean tmp = false;
-            if (currFace != null && (!(faceVisited.get(currFace)))) {
+            if (faceVisited.get(currFace) == null) {
                 objectContainer = Geom2D.isInFace(x, y, currFace);
                 Intersection _g3 = objectContainer;
                 switch (_g3.index) {

@@ -784,16 +784,16 @@ public class Mesh {
         this.faces.push(fBotRight);
         this.faces.push(fBotLeft);
         this.faces.push(fTopLeft);
-        vCenter.setDatas(((fTop.isReal()) ? (eCenter_Top) : (eCenter_Bot)), false);
+        vCenter.setDatas(((fTop.isReal()) ? (eCenter_Top) : (eCenter_Bot)), true);
         vCenter.getPos().x = x;
         vCenter.getPos().y = y;
         Geom2D.projectOrthogonaly(vCenter.getPos(), eLeft_Right);
-        eCenter_Top.setDatas(vCenter, eTop_Center, eTop_Left, fTopLeft, fTop.isReal(), false);
-        eTop_Center.setDatas(vTop, eCenter_Top, eCenter_Right, fTopRight, fTop.isReal(), false);
+        eCenter_Top.setDatas(vCenter, eTop_Center, eTop_Left, fTopLeft, fTop.isReal(), true);
+        eTop_Center.setDatas(vTop, eCenter_Top, eCenter_Right, fTopRight, fTop.isReal(), true);
         eCenter_Left.setDatas(vCenter, eLeft_Center, eLeft_Bot, fBotLeft, edge.isReal(), edge.isConstrained());
         eLeft_Center.setDatas(vLeft, eCenter_Left, eCenter_Top, fTopLeft, edge.isReal(), edge.isConstrained());
-        eCenter_Bot.setDatas(vCenter, eBot_Center, eBot_Right, fBotRight, fBot.isReal(), false);
-        eBot_Center.setDatas(vBot, eCenter_Bot, eCenter_Left, fBotLeft, fBot.isReal(), false);
+        eCenter_Bot.setDatas(vCenter, eBot_Center, eBot_Right, fBotRight, fBot.isReal(), true);
+        eBot_Center.setDatas(vBot, eCenter_Bot, eCenter_Left, fBotLeft, fBot.isReal(), true);
         eCenter_Right.setDatas(vCenter, eRight_Center, eRight_Top, fTopRight, edge.isReal(), edge.isConstrained());
         eRight_Center.setDatas(vRight, eCenter_Right, eCenter_Bot, fBotRight, edge.isReal(), edge.isConstrained());
         fTopLeft.setDatas(eCenter_Top, fTop.isReal());
@@ -801,10 +801,10 @@ public class Mesh {
         fBotRight.setDatas(eCenter_Bot, fBot.isReal());
         fTopRight.setDatas(eCenter_Right, fTop.isReal());
         if ((vLeft.getEdge() == eLeft_Right)) {
-            vLeft.setDatas(eLeft_Center, false);
+            vLeft.setDatas(eLeft_Center, true);
         }
         if ((vRight.getEdge() == eRight_Left)) {
-            vRight.setDatas(eRight_Center, false);
+            vRight.setDatas(eRight_Center, true);
         }
         eTop_Left.setNextLeftEdge(eLeft_Center);
         eTop_Left.setLeftFace(fTopLeft);
@@ -889,18 +889,18 @@ public class Mesh {
         this.faces.push(fTopLeft);
         this.faces.push(fBot);
         this.faces.push(fTopRight);
-        vCenter.setDatas(eCenter_Top, false);
+        vCenter.setDatas(eCenter_Top, true);
         vCenter.getPos().x = x;
         vCenter.getPos().y = y;
-        eTop_Center.setDatas(vTop, eCenter_Top, eCenter_Right, fTopRight, false, false);
-        eCenter_Top.setDatas(vCenter, eTop_Center, eTop_Left, fTopLeft, false, false);
-        eLeft_Center.setDatas(vLeft, eCenter_Left, eCenter_Top, fTopLeft, false, false);
-        eCenter_Left.setDatas(vCenter, eLeft_Center, eLeft_Right, fBot, false, false);
-        eRight_Center.setDatas(vRight, eCenter_Right, eCenter_Left, fBot, false, false);
-        eCenter_Right.setDatas(vCenter, eRight_Center, eRight_Top, fTopRight, false, false);
-        fTopLeft.setDatas(eCenter_Top, false);
-        fBot.setDatas(eCenter_Left, false);
-        fTopRight.setDatas(eCenter_Right, false);
+        eTop_Center.setDatas(vTop, eCenter_Top, eCenter_Right, fTopRight, true, true);
+        eCenter_Top.setDatas(vCenter, eTop_Center, eTop_Left, fTopLeft, true, true);
+        eLeft_Center.setDatas(vLeft, eCenter_Left, eCenter_Top, fTopLeft, true, true);
+        eCenter_Left.setDatas(vCenter, eLeft_Center, eLeft_Right, fBot, true, true);
+        eRight_Center.setDatas(vRight, eCenter_Right, eCenter_Left, fBot, true, true);
+        eCenter_Right.setDatas(vCenter, eRight_Center, eRight_Top, fTopRight, true, true);
+        fTopLeft.setDatas(eCenter_Top, true);
+        fBot.setDatas(eCenter_Left, true);
+        fTopRight.setDatas(eCenter_Right, true);
         eTop_Left.setNextLeftEdge(eLeft_Center);
         eTop_Left.setLeftFace(fTopLeft);
         eLeft_Right.setNextLeftEdge(eRight_Center);
@@ -998,17 +998,15 @@ public class Mesh {
         this.faces.push(fBot);
         eLeft_Right.setDatas(vLeft, eRight_Left, eRight_Top, fTop, edge.isReal(), edge.isConstrained());
         eRight_Left.setDatas(vRight, eLeft_Right, eLeft_Bot, fBot, edge.isReal(), edge.isConstrained());
-        fTop.setDatas(eLeft_Right, false);
-        fBot.setDatas(eRight_Left, false);
+        fTop.setDatas(eLeft_Right, true);
+        fBot.setDatas(eRight_Left, true);
         if ((vTop.getEdge().getId() == eTop_Bot.getId())) //todo equals impl
         {
-            vTop.setDatas(eTop_Left, false);
+            vTop.setDatas(eTop_Left, true);
         }
-
         if ((vBot.getEdge().getId() == eBot_Top.getId())) {
-            vBot.setDatas(eBot_Right, false);
+            vBot.setDatas(eBot_Right, true);
         }
-
         eTop_Left.setNextLeftEdge(eLeft_Right);
         eTop_Left.setLeftFace(fTop);
         eLeft_Bot.setNextLeftEdge(eBot_Right);

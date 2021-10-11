@@ -1,10 +1,14 @@
 package org.xeks.data;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.xeks.Vector;
 import org.xeks.data.math.Point2D;
 
+
+@EqualsAndHashCode
 public class Vertex {
 
 
@@ -70,4 +74,11 @@ public class Vertex {
         this.fromConstraintSegments = null;
     }
 
+    @Override
+    public String toString() {
+        return "Vertex{" +
+                "id=" + id +
+                ", isReal=" + isReal +
+                '}';
+    }
 }

@@ -38,10 +38,10 @@ public class RectMesh {
         vTR.getPos().setXY(( width + offset ), ( 0 - offset ));
         vBR.getPos().setXY(( width + offset ), ( height + offset ));
         vBL.getPos().setXY(( 0 - offset ), ( height + offset ));
-        vTL.setDatas(eTL_TR, false);
-        vTR.setDatas(eTR_BR, false);
-        vBR.setDatas(eBR_BL, false);
-        vBL.setDatas(eBL_TL, false);
+        vTL.setDatas(eTL_TR, true);
+        vTR.setDatas(eTR_BR, true);
+        vBR.setDatas(eBR_BL, true);
+        vBL.setDatas(eBL_TL, true);
         eTL_TR.setDatas(vTL, eTR_TL, eTR_BR, fTL_TR_BR, true, true);
         eTR_TL.setDatas(vTR, eTL_TR, eTL_BL, fTL_BL_TR, true, true);
         eTR_BR.setDatas(vTR, eBR_TR, eBR_TL, fTL_TR_BR, true, true);
@@ -54,8 +54,8 @@ public class RectMesh {
         eBL_TR.setDatas(vBL, eTR_BL, eTR_TL, fTL_BL_TR, true, false);
         eTL_BR.setDatas(vTL, eBR_TL, eBR_BL, fTL_BR_BL, false, false);
         eBR_TL.setDatas(vBR, eTL_BR, eTL_TR, fTL_TR_BR, false, false);
-        fTL_BL_TR.setDatas(eBL_TR, false);
-        fTR_BL_BR.setDatas(eTR_BL, false);
+        fTL_BL_TR.setDatas(eBL_TR, true);
+        fTR_BL_BR.setDatas(eTR_BL, true);
         fTL_BR_BL.setDatas(eBR_BL, false);
         fTL_TR_BR.setDatas(eTR_BR, false);
         vTL.setFromConstraintSegments(new Vector<>(new ConstraintSegment[]{segTop, segLeft}));
@@ -80,7 +80,7 @@ public class RectMesh {
         segLeft.fromShape = boundShape;
         {
             int _g = 0;
-            Vector<ConstraintSegment> _g1 = new Vector<ConstraintSegment>(new ConstraintSegment[]{segTop, segRight, segBot, segLeft});
+            Vector<ConstraintSegment> _g1 = new Vector<>(new ConstraintSegment[]{segTop, segRight, segBot, segLeft});
             while (( _g < _g1.length ))
             {
                 ConstraintSegment f = _g1.get(_g);
@@ -92,7 +92,7 @@ public class RectMesh {
 
         {
             int _g2 = 0;
-            Vector<Vertex> _g11 = new Vector<Vertex>(new Vertex[]{vTL, vTR, vBR, vBL});
+            Vector<Vertex> _g11 = new Vector<>(new Vertex[]{vTL, vTR, vBR, vBL});
             while (( _g2 < _g11.length ))
             {
                 Vertex f1 = _g11.get(_g2);

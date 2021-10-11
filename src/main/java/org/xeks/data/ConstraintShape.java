@@ -1,9 +1,12 @@
 package org.xeks.data;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.xeks.Vector;
-
+@ToString
+@EqualsAndHashCode
 public class ConstraintShape {
 
     public static int INC = 0;
