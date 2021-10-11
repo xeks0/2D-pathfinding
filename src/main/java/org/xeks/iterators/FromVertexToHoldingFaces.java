@@ -28,7 +28,7 @@ public class FromVertexToHoldingFaces {
             while (true) {
                 this.resultFace = this.nextEdge.getLeftFace();
                 this.nextEdge = this.nextEdge.getRotLeftEdge();
-                if ((this.nextEdge == this.fromVertex.getEdge())) {
+                if ((this.nextEdge.getId() == this.fromVertex.getEdge().getId())) {
                     this.nextEdge = null;
                     if (!(this.resultFace.isReal())) {
                         this.resultFace = null;

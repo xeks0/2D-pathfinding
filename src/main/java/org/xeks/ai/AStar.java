@@ -13,7 +13,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class AStar {
-
+    public AStar() {
+        iterEdge = new FromFaceToInnerEdges();
+    }
 
     @Getter
     public double radius;
@@ -185,7 +187,7 @@ public class AStar {
             }
 
             this.curFace = ((Face) (this.sortedOpenedFaces.pop()));
-            if ((this.curFace == this.toFace)) {
+            if ((this.curFace.equals(this.toFace))) {
                 break;
             }
 
@@ -218,7 +220,7 @@ public class AStar {
                     f = (h + g);
                     fillDatas = false;
                     //todo check syntax
-                    if (( (this.openedFaces).get(neighbourFace) == null) || (!(this.openedFaces.get(neighbourFace) != null && this.openedFaces.get(neighbourFace)))) {
+                    if ((this.openedFaces.get(neighbourFace) == null) || (this.openedFaces.get(neighbourFace) != null && !this.openedFaces.get(neighbourFace))) {
                         this.sortedOpenedFaces.push(neighbourFace);
                         (this.openedFaces).put(neighbourFace, true);
                         fillDatas = true;
@@ -256,7 +258,17 @@ public class AStar {
             this.openedFaces.put(this.curFace, false);
             this.closedFaces.put(this.curFace, true);
             //with low distance value are at the end of the array
-            SortArgInterface sortArgInterface = (int a, int b)-> scoreF.get(b).compareTo(scoreF.get(a));
+            SortArgInterface sortArgInterface = (int a, int b)-> {
+                if(scoreF.get(b) == null || scoreF.get(b)== null){
+                    return 0;
+                }
+                if (scoreF.get(a) == scoreF.get(b))
+                    return 0;
+                else if (scoreF.get(a) < scoreF.get(b))
+                    return 1;
+                else
+                    return -1;
+            };
             this.sortedOpenedFaces.sort(sortArgInterface);
         }
 

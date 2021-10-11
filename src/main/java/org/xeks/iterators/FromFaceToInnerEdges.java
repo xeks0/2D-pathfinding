@@ -27,7 +27,7 @@ public class FromFaceToInnerEdges {
         if ((this.nextEdge != null)) {
             this.resultEdge = this.nextEdge;
             this.nextEdge = this.nextEdge.getNextLeftEdge();
-            if ((this.nextEdge == this.fromFace.getEdge())) {
+            if ((this.nextEdge.getId() == this.fromFace.getEdge().getId())) {
                 this.nextEdge = null;
             }
         } else {

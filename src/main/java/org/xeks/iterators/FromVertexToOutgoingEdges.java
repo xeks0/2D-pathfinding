@@ -31,7 +31,7 @@ public class FromVertexToOutgoingEdges {
             this._resultEdge = this._nextEdge;
             while (true) {
                 this._nextEdge = this._nextEdge.getRotLeftEdge();
-                if ((this._nextEdge == this._fromVertex.getEdge())) {
+                if ((this._nextEdge.getId() == this._fromVertex.getEdge().getId())) {
                     this._nextEdge = null;
                     break;
                 }

@@ -327,5 +327,17 @@ public class Vector<T> {
         }
     }
 
-
+    public final void reverse() {
+        int i = 0;
+        int l = this.length;
+        T[] a = this.array;
+        int half = (l >> 1);
+        --l;
+        while ((i < half)) {
+            T tmp = a[i];
+            a[i] = a[(l - i)];
+            a[(l - i)] = tmp;
+            ++i;
+        }
+    }
 }

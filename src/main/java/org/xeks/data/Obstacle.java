@@ -39,7 +39,7 @@ public class Obstacle {
 
     @Getter
     @Setter
-    public Vector<java.lang.Object> coordinates;
+    public Vector<Double> coordinates;
 
     @Getter
     @Setter
@@ -142,7 +142,7 @@ public class Obstacle {
         return matrix;
     }
 
-    public Vector<Object> setCoordinates(Vector<Object> vector) {
+    public Vector<Double> setCoordinates(Vector<Double> vector) {
         this.coordinates = vector;
         this.hasChanged = true;
         return vector;

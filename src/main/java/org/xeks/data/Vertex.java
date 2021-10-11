@@ -7,8 +7,9 @@ import lombok.ToString;
 import org.xeks.Vector;
 import org.xeks.data.math.Point2D;
 
+import java.util.Objects;
 
-@EqualsAndHashCode
+
 public class Vertex {
 
 
@@ -80,5 +81,18 @@ public class Vertex {
                 "id=" + id +
                 ", isReal=" + isReal +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vertex vertex = (Vertex) o;
+        return id == vertex.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

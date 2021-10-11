@@ -7,8 +7,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.xeks.Vector;
 
+import java.util.Objects;
 
-@EqualsAndHashCode
+
 public class Edge {
 
 
@@ -126,5 +127,18 @@ public class Edge {
                 ", isReal=" + isReal +
                 ", isConstrained=" + isConstrained +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return id == edge.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
