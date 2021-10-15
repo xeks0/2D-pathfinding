@@ -1,4 +1,2 @@
 ## 2D pathfinding
-Java library port in base as3 Daedalus-lib and hxDaedalus pathfinding lib. Faster jwalkable lib from automatic hx java port ~2 times
-
-You may find useful to read through the wiki for the original as3 lib here
+Java library port in base as3 [Daedalus-lib!](https://code.google.com/archive/p/daedalus-lib/) and [hxDaedalus!](https://github.com/hxDaedalus/hxDaedalus) pathfinding lib. Faster [jwalkable!](https://github.com/implicit-invocation/jwalkable) lib hx java port ~>2 times
