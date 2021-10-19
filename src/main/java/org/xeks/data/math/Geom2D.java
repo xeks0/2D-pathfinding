@@ -261,13 +261,10 @@ public class Geom2D {
             } else {
                 return -1;
             }
-
         }
-
     }
 
     public static int getRelativePosition(double x, double y, Edge eUp) {
-
         return Geom2D.getDirection(eUp.getOriginVertex().getPos().x, eUp.getOriginVertex().getPos().y, eUp.getDestinationVertex().getPos().x, eUp.getDestinationVertex().getPos().y, x, y);
     }
 
@@ -442,15 +439,11 @@ public class Geom2D {
                 face = vertex.getEdge().getLeftFace();
                 break;
             }
-
-
             case 1: {
                 Edge edge = ((Edge) (loc.params[0]));
                 face = edge.getLeftFace();
                 break;
             }
-
-
             case 2: {
                 Face face_ = ((Face) (loc.params[0]));
                 face = face_;

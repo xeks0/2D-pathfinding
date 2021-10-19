@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.xeks.Vector;
 import org.xeks.data.math.Geom2D;
 import org.xeks.data.math.Intersection;
+import org.xeks.data.math.Matrix2D;
 import org.xeks.data.math.Point2D;
 import org.xeks.iterators.FromVertexToOutgoingEdges;
 
@@ -464,10 +465,10 @@ public class Mesh {
                                             if (currEdge == null) {
                                                 break;
                                             }
-                                            if ((currEdge.getDestinationVertex() == leftBoundingEdges.get(0).getOriginVertex())) {
+                                            if ((currEdge.getDestinationVertex().getId() == leftBoundingEdges.get(0).getOriginVertex().getId())) {
                                                 leftBoundingEdges.unshift(currEdge);
                                             }
-                                            if ((currEdge.getDestinationVertex() == rightBoundingEdges.get((rightBoundingEdges.length - 1)).getDestinationVertex())) {
+                                            if ((currEdge.getDestinationVertex().getId() == rightBoundingEdges.get((rightBoundingEdges.length - 1)).getDestinationVertex().getId())) {
                                                 rightBoundingEdges.push(currEdge.getOppositeEdge());
                                             }
                                         }
@@ -963,7 +964,7 @@ public class Mesh {
         while ((this.edgesToCheck.length > 0)) {
             edge = ((Edge) (this.edgesToCheck.shift()));
             if (((edge.isReal() && !(edge.isConstrained())) && !(Geom2D.isDelaunay(edge)))) {
-                if ((edge.getNextLeftEdge().getDestinationVertex() == this.centerVertex)) {
+                if ((edge.getNextLeftEdge().getDestinationVertex().getId() == this.centerVertex.getId())) {
                     this.edgesToCheck.push(edge.getNextRightEdge());
                     this.edgesToCheck.push(edge.getPrevRightEdge());
                 } else {
@@ -1063,16 +1064,13 @@ public class Mesh {
         }
     }
 
-    public ConstraintShape insertConstraintShape(Vector<Double> coordinates)
-    {
-       ConstraintShape shape = new ConstraintShape();
+    public ConstraintShape insertConstraintShape(Vector<Double> coordinates) {
+        ConstraintShape shape = new ConstraintShape();
         ConstraintSegment segment = null;
         int i = 0;
-        while (( i < coordinates.length ))
-        {
-            segment = this.insertConstraintSegment(coordinates.get(i), coordinates.get( i + 1 ),coordinates.get( i + 2 ),coordinates.get( i + 3 ));
-            if (( segment != null ))
-            {
+        while ((i < coordinates.length)) {
+            segment = this.insertConstraintSegment(coordinates.get(i), coordinates.get(i + 1), coordinates.get(i + 2), coordinates.get(i + 3));
+            if ((segment != null)) {
                 segment.fromShape = shape;
                 shape.segments.push(segment);
             }
@@ -1083,5 +1081,293 @@ public class Mesh {
         this.constraintShapes.push(shape);
         return shape;
     }
+
+
+    public void insertObject(Obstacle object) {
+        if ((object.getConstraintShape() != null)) {
+            this.deleteObject(object);
+        }
+
+        ConstraintShape shape = new ConstraintShape();
+        ConstraintSegment segment = null;
+        Vector<Double> coordinates = object.getCoordinates();
+        Matrix2D m = object.getMatrix();
+        object.updateMatrixFromValues();
+        double x1 = 0.0;
+        double y1 = 0.0;
+        double x2 = 0.0;
+        double y2 = 0.0;
+        double transfx1 = 0.0;
+        double transfy1 = 0.0;
+        double transfx2 = 0.0;
+        double transfy2 = 0.0;
+        int i = 0;
+        while ((i < coordinates.length)) {
+            x1 = coordinates.get(i);
+            y1 = coordinates.get(i + 1);
+            x2 = coordinates.get(i + 2);
+            y2 = coordinates.get(i + 3);
+            transfx1 = m.transformX(x1, y1);
+            transfy1 = m.transformY(x1, y1);
+            transfx2 = m.transformX(x2, y2);
+            transfy2 = m.transformY(x2, y2);
+            segment = this.insertConstraintSegment(transfx1, transfy1, transfx2, transfy2);
+            if ((segment != null)) {
+                segment.fromShape = shape;
+                shape.segments.push(segment);
+            }
+            i += 4;
+        }
+        this.constraintShapes.push(shape);
+        object.setConstraintShape(shape);
+        if (!(this.objectsUpdateInProgress)) {
+            this.objects.push(object);
+        }
+    }
+
+
+    public void deleteObject(Obstacle object) {
+        if ((object.getConstraintShape() == null)) {
+            return;
+        }
+
+        this.deleteConstraintShape(object.getConstraintShape());
+        object.setConstraintShape(null);
+        if (!(this.objectsUpdateInProgress)) {
+            int index = this.objects.indexOf(object, null);
+            this.objects.splice(index, 1);
+        }
+
+    }
+
+    public void deleteConstraintShape(ConstraintShape shape) {
+        {
+            int _g1 = 0;
+            int _g = shape.segments.length;
+            while ((_g1 < _g)) {
+                int i = _g1++;
+                this.deleteConstraintSegment(shape.segments.get(i));
+            }
+
+        }
+
+        shape.dispose();
+        this.constraintShapes.splice(this.constraintShapes.indexOf(shape, null), 1);
+    }
+
+    public void deleteConstraintSegment(ConstraintSegment segment) {
+        int i = 0;
+        Vector<Vertex> vertexToDelete = new Vector<>();
+        Edge edge = null;
+        Vertex vertex = null;
+        Vector<ConstraintSegment> fromConstraintSegment = null;
+        {
+            int _g1 = 0;
+            int _g = segment.getEdges().length;
+            while ((_g1 < _g)) {
+                int i1 = _g1++;
+                edge = segment.getEdges().get(i1);
+                edge.removeFromConstraintSegment(segment);
+                if ((edge.fromConstraintSegments.length == 0)) {
+                    edge.setConstrained(false);
+                    edge.getOppositeEdge().setConstrained(false);
+                }
+
+                vertex = edge.getOriginVertex();
+                vertex.removeFromConstraintSegment(segment);
+                vertexToDelete.push(vertex);
+            }
+
+        }
+
+        vertex = edge.getDestinationVertex();
+        vertex.removeFromConstraintSegment(segment);
+        vertexToDelete.push(vertex);
+        {
+            int _g11 = 0;
+            int _g2 = vertexToDelete.length;
+            while ((_g11 < _g2)) {
+                int i2 = _g11++;
+                this.deleteVertex(vertexToDelete.get(i2));
+            }
+
+        }
+        segment.dispose();
+    }
+
+    public boolean deleteVertex(Vertex vertex) {
+        int i = 0;
+        boolean freeOfConstraint = false;
+        FromVertexToOutgoingEdges iterEdges = new FromVertexToOutgoingEdges();
+        iterEdges.set_fromVertex(vertex);
+        iterEdges.realEdgesOnly = false;
+        Edge edge = null;
+        Vector<Edge> outgoingEdges = new Vector<>();
+        freeOfConstraint = (vertex.getFromConstraintSegments().length == 0);
+        Vector<Edge> bound = new Vector<>();
+        boolean realA = false;
+        boolean realB = false;
+        Vector<Edge> boundA = new Vector<Edge>(new Edge[]{});
+        Vector<Edge> boundB = new Vector<Edge>(new Edge[]{});
+        if (freeOfConstraint) {
+            while (true) {
+                edge = iterEdges.next();
+                if (edge == null) {
+                    break;
+                }
+
+                outgoingEdges.push(edge);
+                bound.push(edge.getNextLeftEdge());
+            }
+
+        } else {
+            Vector<Edge> edges = null;
+            {
+                int _g1 = 0;
+                int _g = vertex.getFromConstraintSegments().length;
+                while ((_g1 < _g)) {
+                    int i1 = _g1++;
+                    edges = vertex.getFromConstraintSegments().get(i1).getEdges();
+                    if (((edges.get(0).getOriginVertex() == vertex) || (edges.get((edges.length - 1)).getDestinationVertex().getId() == vertex.getId()))) {
+                        return false;
+                    }
+                }
+            }
+            int count = 0;
+            while (true) {
+                edge = iterEdges.next();
+                if (edge == null) {
+                    break;
+                }
+                outgoingEdges.push(edge);
+                if (edge.isConstrained()) {
+                    ++count;
+                    if ((count > 2)) {
+                        return false;
+                    }
+                }
+            }
+            boundA = new Vector<>();
+            boundB = new Vector<>();
+            Edge constrainedEdgeA = null;
+            Edge constrainedEdgeB = null;
+            Edge edgeA = new Edge();
+            Edge edgeB = new Edge();
+            this.edges.push(edgeA);
+            this.edges.push(edgeB);
+            {
+                int _g11 = 0;
+                int _g2 = outgoingEdges.length;
+                while ((_g11 < _g2)) {
+                    int i2 = _g11++;
+                    edge = outgoingEdges.get(i2);
+                    if (edge.isConstrained()) {
+                        if ((constrainedEdgeA == null)) {
+                            edgeB.setDatas(edge.getDestinationVertex(), edgeA, null, null, true, true);
+                            boundA.push(edgeA);
+                            boundA.push(edge.getNextLeftEdge());
+                            boundB.push(edgeB);
+                            constrainedEdgeA = edge;
+                        } else {
+                            if ((constrainedEdgeB == null)) {
+                                edgeA.setDatas(edge.getDestinationVertex(), edgeB, null, null, true, true);
+                                boundB.push(edge.getNextLeftEdge());
+                                constrainedEdgeB = edge;
+                            }
+
+                        }
+
+                    } else {
+                        if ((constrainedEdgeA == null)) {
+                            boundB.push(edge.getNextLeftEdge());
+                        } else {
+                            if ((constrainedEdgeB == null)) {
+                                boundA.push(edge.getNextLeftEdge());
+                            } else {
+                                boundB.push(edge.getNextLeftEdge());
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            assert constrainedEdgeA != null;
+            realA = constrainedEdgeA.getLeftFace().isReal();
+            assert constrainedEdgeB != null;
+            realB = constrainedEdgeB.getLeftFace().isReal();
+            edgeA.fromConstraintSegments = constrainedEdgeA.fromConstraintSegments.slice(0, null);
+            edgeB.fromConstraintSegments = edgeA.fromConstraintSegments;
+            int index = 0;
+            {
+                int _g12 = 0;
+                int _g3 = vertex.getFromConstraintSegments().length;
+                while ((_g12 < _g3)) {
+                    int i3 = _g12++;
+                    edges = vertex.getFromConstraintSegments().get(i3).getEdges();
+                    index = edges.indexOf(constrainedEdgeA, null);
+                    if ((index != -1)) {
+                        edges.splice((index - 1), 2);
+                        edges.insert((index - 1), edgeA);
+                    } else {
+                        int index2 = (edges.indexOf(constrainedEdgeB, null) - 1);
+                        edges.splice(index2, 2);
+                        edges.insert(index2, edgeB);
+                    }
+
+                }
+
+            }
+
+        }
+
+        Face faceToDelete = null;
+        {
+            int _g13 = 0;
+            int _g4 = outgoingEdges.length;
+            while ((_g13 < _g4)) {
+                int i4 = _g13++;
+                edge = outgoingEdges.get(i4);
+                faceToDelete = edge.getLeftFace();
+                this.faces.splice(this.faces.indexOf(faceToDelete, null), 1);
+                faceToDelete.dispose();
+                edge.getDestinationVertex().setEdge(edge.getNextLeftEdge());
+                this.edges.splice(this.edges.indexOf(edge.getOppositeEdge(), null), 1);
+                edge.getOppositeEdge().dispose();
+                this.edges.splice(this.edges.indexOf(edge, null), 1);
+                edge.dispose();
+            }
+
+        }
+
+        this.vertices.splice(this.vertices.indexOf(vertex, null), 1);
+        vertex.dispose();
+        if (freeOfConstraint) {
+            this.triangulate(bound, true);
+        } else {
+            this.triangulate(boundA, realA);
+            this.triangulate(boundB, realB);
+        }
+        return true;
+    }
+
+
+    public void updateObjects() {
+        this.objectsUpdateInProgress = true;
+        {
+            for (int i = 0; i < this.objects.length; i++) {
+                if (this.objects.get(i).isHasChanged()) {
+                    this.deleteObject(this.objects.get(i));
+                    this.insertObject(this.objects.get(i));
+                    this.objects.get(i).setHasChanged(false);
+                }
+            }
+        }
+        this.objectsUpdateInProgress = false;
+    }
+
 
 }
